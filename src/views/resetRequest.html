@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Request Password Reset</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f7f7f7;
+      flex-direction: column;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+      width: 300px;
+    }
+
+    input,
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button[type="submit"] {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    .notification {
+      color: red;
+      text-align: center;
+      width: 100%;
+    }
+
+    .login-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-button">
+    <a href="/login"><button>Login</button></a>
+  </div>
+
+  <form action="/reset/reset-request" method="POST" id="resetRequestForm">
+    <input type="email" name="email" placeholder="Enter your email" required>
+    <button type="submit">Request Password Reset</button>
+  </form>
+
+  <div class="notification" id="notification"></div>
+
+  <script>
+    const form = document.getElementById('resetRequestForm');
+    const notification = document.getElementById('notification');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      notification.textContent = '';
+
+      const formData = new FormData(form);
+      const jsonData = {};
+
+      formData.forEach((value, key) => {
+        jsonData[key] = value;
+      });
+
+      try {
+        const response = await fetch('/reset/reset-request', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(jsonData)
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          notification.style.color = 'red';
+          throw new Error(errorData.message || 'Error requesting password reset');
+        } else {
+          notification.style.color = 'green';
+          notification.textContent = 'Reset link sent to your email';
+        }
+      } catch (error) {
+        notification.style.color = 'red';
+        notification.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+
+</html>

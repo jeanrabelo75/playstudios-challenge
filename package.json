@@ -1,0 +1,27 @@
+{
+  "name": "api-challenge-playstudios",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "mocha --exit"
+  },
+  "keywords": [],
+  "author": "Jean-Rabelo-Borges",
+  "license": "ISC",
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mongoose": "^7.4.4"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^10.2.0",
+    "sinon": "^15.2.0"
+  }
+}

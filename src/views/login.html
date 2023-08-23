@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f7f7f7;
+      flex-direction: column;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+      width: 300px;
+    }
+
+    form a {
+      text-decoration: none;
+      transition: color 0.3s ease;
+      margin-top: 10px;
+    }
+
+    form a:hover {
+      color: #0056b3;
+    }
+
+    input,
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button[type="submit"] {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    .notification {
+      color: red;
+      text-align: center;
+      width: 100%;
+    }
+
+    .create-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="create-button">
+    <a href="/users"><button>Create User</button></a>
+  </div>
+
+  <form action="/login" method="POST" id="loginForm">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+    <a href="/reset/reset-request" style="display: block; text-align: center; margin-top: 10px; color: #007bff;">Forgot
+      your password?</a>
+    <div class="notification" id="notification"></div>
+  </form>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const notification = document.getElementById('notification');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      notification.textContent = '';
+
+      const formData = new FormData(form);
+      const jsonData = {};
+
+      formData.forEach((value, key) => {
+        jsonData[key] = value;
+      });
+
+      try {
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(jsonData)
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Error logging in');
+        } else {
+          window.location.href = '/logged';
+        }
+      } catch (error) {
+        notification.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+
+</html>
